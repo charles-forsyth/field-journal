@@ -155,12 +155,11 @@
       color: #FFF;
     }
     .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      display:flex; flex-wrap:wrap; justify-content:center;
       gap: 24px;
       justify-content: center;
     }
-    .phone-mockup {
+    .phone-mockup { flex: 0 1 200px;
       background: #000;
       border-radius: 36px;
       padding: 8px;
