@@ -1,5 +1,7 @@
 # Field Journal
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23755518.svg)](https://doi.org/10.5281/zenodo.23755518)
+
 [![CI](https://github.com/charles-forsyth/field-journal/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/charles-forsyth/field-journal/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](https://github.com/charles-forsyth/field-journal/releases)
@@ -132,7 +134,7 @@ If you use Field Journal for agronomy research, academic field trials, wildlife 
   title        = {Field Journal: an offline-first Android field notebook for land, wildlife and agronomy},
   version      = {1.2.0},
   year         = {2026},
-  doi          = {pending},
+  doi          = {10.5281/zenodo.23755518},
   url          = {https://github.com/charles-forsyth/field-journal}
 }
 ```
