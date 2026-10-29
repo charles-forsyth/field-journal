@@ -1,0 +1,9 @@
+-dontwarn org.osmdroid.**
+-dontwarn javax.annotation.**
+-dontwarn com.google.errorprone.annotations.**
+-dontwarn com.google.crypto.tink.**
+-keep class org.eclipse.paho.client.mqttv3.** { *; }
+-dontwarn org.eclipse.paho.**
+-keep class androidx.security.crypto.** { *; }
+-dontwarn okhttp3.**
+-dontwarn okio.**

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Field Journal — Offline-First Android Notebook for Land, Wildlife & Agronomy</title>
+  <meta name="description" content="An offline-first Android field notebook for property management, agricultural observation, wildlife tracking, and geospatial surveying with zero account requirement.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F4EFE6;
+      --paper: #FAF6EE;
+      --card: #FDFBF7;
+      --text: #24201A;
+      --text-muted: #6B6255;
+      --heading: #18140F;
+      --brass: #9E7A3E;
+      --brass-light: #C4A265;
+      --pine: #3B4D3C;
+      --pine-dark: #253326;
+      --border: #DFD7C7;
+      --border-dark: #BDB3A0;
+      --font-serif: 'EB Garamond', Georgia, serif;
+      --font-sans: 'Source Sans 3', -apple-system, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Topographic contour header banner */
+    .topo-header {
+      background: linear-gradient(180deg, #EBE4D5 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 50px 24px 40px;
+      text-align: center;
+      position: relative;
+    }
+    .badge-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--pine);
+      margin-bottom: 24px;
+    }
+    .badge-bar span { color: var(--brass); font-weight: 600; }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
+      font-weight: 600;
+      color: var(--heading);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .tagline {
+      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 30px;
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
+
+    .cta-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: var(--pine);
+      color: #FFF;
+      border: 1px solid var(--pine-dark);
+    }
+    .btn-primary:hover {
+      background: var(--pine-dark);
+    }
+    .btn-secondary {
+      background: var(--paper);
+      color: var(--heading);
+      border: 1px solid var(--border-dark);
+    }
+    .btn-secondary:hover {
+      background: #FFF;
+      border-color: var(--brass);
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    /* Screenshot gallery & mode switcher */
+    .gallery-section {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .mode-switcher {
+      display: inline-flex;
+      background: var(--paper);
+      border: 1px solid var(--border-dark);
+      border-radius: 6px;
+      padding: 4px;
+      margin: 20px 0 40px;
+      gap: 4px;
+    }
+    .mode-btn {
+      padding: 8px 18px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .mode-btn.active {
+      background: var(--pine);
+      color: #FFF;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      justify-content: center;
+    }
+    .phone-mockup {
+      background: #000;
+      border-radius: 36px;
+      padding: 8px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08);
+      border: 3px solid #3A352F;
+      transition: transform 0.25s ease;
+    }
+    .phone-mockup:hover {
+      transform: translateY(-6px);
+    }
+    .phone-mockup img {
+      width: 100%;
+      height: auto;
+      border-radius: 28px;
+      display: block;
+    }
+    .screen-label {
+      margin-top: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Feature Grid */
+    .features-section {
+      margin-bottom: 80px;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      color: var(--heading);
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--brass);
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      margin-top: 36px;
+    }
+    .feature-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .feature-card h3 {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      color: var(--heading);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Privacy Banner */
+    .privacy-banner {
+      background: var(--pine);
+      color: #F8F5EE;
+      border-radius: 8px;
+      padding: 40px;
+      margin-bottom: 80px;
+      border-left: 6px solid var(--brass);
+    }
+    .privacy-banner h2 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      color: #FFF;
+      margin-bottom: 12px;
+    }
+    .privacy-banner p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #E2DBD0;
+      max-width: 820px;
+    }
+
+    /* Install & Specs */
+    .install-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+      margin-bottom: 80px;
+    }
+    .install-box, .cite-box {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 28px;
+    }
+    pre {
+      background: #24201A;
+      color: #EAE3D0;
+      padding: 16px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      overflow-x: auto;
+      margin: 16px 0;
+      line-height: 1.5;
+    }
+    ol {
+      margin-left: 20px;
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--paper);
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-family: var(--font-mono);
+    }
+    footer a { color: var(--pine); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header class="topo-header">
+    <div class="badge-bar">
+      <span>Field Journal</span> &bull; Offline-First Agronomy & Field Notebook
+    </div>
+    <h1>Field Journal</h1>
+    <p class="tagline">An expedition-grade Android field notebook for land stewardship, agronomy trials, wildlife monitoring, and acoustic surveying.</p>
+    <div class="cta-row">
+      <a href="https://github.com/charles-forsyth/field-journal" class="btn btn-primary">&darr; GitHub Repository</a>
+      <a href="#install" class="btn btn-secondary">&boxbox; Installation Guide</a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Interactive Phone Mockup Gallery -->
+    <section class="gallery-section">
+      <h2 class="section-title">Field-Engineered Display Modes</h2>
+      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Tested under extreme field lighting: bright open canopy, evening dusk shade, and tactical zero-lux red to preserve natural dark-adapted vision.</p>
+      
+      <div class="mode-switcher">
+        <button class="mode-btn active" onclick="switchMode('sunlight', this)">Sunlight Mode</button>
+        <button class="mode-btn" onclick="switchMode('dusk', this)">Forest Dusk</button>
+        <button class="mode-btn" onclick="switchMode('night', this)">Night Red (620 nm)</button>
+      </div>
+
+      <div class="gallery-grid">
+        <div>
+          <div class="phone-mockup">
+            <img id="screen-lens" src="screenshots/lens_sunlight.png" alt="Optical Lens Viewfinder HUD">
+          </div>
+          <div class="screen-label">Optical Lens HUD</div>
+        </div>
+        <div>
+          <div class="phone-mockup">
+            <img id="screen-map" src="screenshots/map_sunlight.png" alt="Offline Property Map & USGS Topo">
+          </div>
+          <div class="screen-label">USGS Topo & Scrubber</div>
+        </div>
+        <div>
+          <div class="phone-mockup">
+            <img id="screen-journal" src="screenshots/journal_sunlight.png" alt="Field Journal Logbook Cards">
+          </div>
+          <div class="screen-label">Journal Entries</div>
+        </div>
+        <div>
+          <div class="phone-mockup">
+            <img id="screen-spectrogram" src="screenshots/spectrogram_sunlight.png" alt="Acoustic Mel Waterfall Spectrogram">
+          </div>
+          <div class="screen-label">Mel Spectrogram</div>
+        </div>
+        <div>
+          <div class="phone-mockup">
+            <img id="screen-settings" src="screenshots/settings_sunlight.png" alt="Specifications & Calibration Plate">
+          </div>
+          <div class="screen-label">Calibration Plate</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy Guarantee -->
+    <section class="privacy-banner">
+      <h2>Strict Privacy & Offline Autonomy</h2>
+      <p>
+        <strong>Zero tracking. Zero cloud lock-in. No accounts.</strong> Field Journal operates completely air-gapped with all SQLite records, geotags, photos, and WAV audio clips stored strictly on your local device filesystem. Export anytime as clean Obsidian-ready Markdown frontmatter bundles and JSON zips. Optional sensor station feeds and AI enrichment use direct peer-to-peer or self-hosted endpoints with no middleman.
+      </p>
+    </section>
+
+    <!-- Capabilities Grid -->
+    <section class="features-section">
+      <h2 class="section-title">Core Capabilities</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>&odot; Optical Lens & Rangefinder</h3>
+          <p>CameraX viewfinder HUD with pitch, azimuth, and trigonometric distance estimation based on calibrated eye height. Dual-ray (Ray A / Ray B) vector intersection accurately triangulates distant landmarks and wildlife sightings without moving to target.</p>
+        </div>
+        <div class="feature-card">
+          <h3>&boxbox; Zero-Key USGS & OSM Maps</h3>
+          <p>Keyless USGS Topo, Aerial Imagery, and OpenStreetMap Mapnik tiles with custom color-matrix night/dusk shaders. Single-link clustering groups field observations, while a 12-month season ruler displays cumulative base-50&deg;F Growing Degree Days (GDD).</p>
+        </div>
+        <div class="feature-card">
+          <h3>&sim; Mel-Waterfall Spectrogram</h3>
+          <p>Built-in 16 kHz mono acoustic recorder with Hann-windowed FFT and 64-bin mel waterfall normalisation. Visualise bird calls, amphibian choruses, and equipment harmonics directly in the field guide feed.</p>
+        </div>
+        <div class="feature-card">
+          <h3>&uarr; Zero-Typing Environmental Stamp</h3>
+          <p>Every note automatically binds hardware barometric pressure (hPa), 3-hour microbarograph pressure trend, relative elevation offset, GPS accuracy, and compass bearing with zero keyboard entry required.</p>
+        </div>
+        <div class="feature-card">
+          <h3>&sect; Obsidian Vault Export</h3>
+          <p>Exports notes directly into standard YAML frontmatter Markdown files with tags, wikilinks (<code>[[Vault: Note]]</code>), GPS coords, and embedded media, ready to open in Obsidian or sync via git.</p>
+        </div>
+        <div class="feature-card">
+          <h3>&Delta; Glove & Physical Controls</h3>
+          <p>Designed for damp field gloves: volume keys double as hardware triggers (hold Volume Down for speech recognition, tap Volume Up to snap) with high-contrast WCAG AA tactile plates.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation & Citation -->
+    <section id="install" class="install-section">
+      <div class="install-box">
+        <h2 class="section-title" style="font-size: 1.6rem;">Installation</h2>
+        <p style="color: var(--text-muted); margin: 12px 0;">Build directly from source or download debug APK artifacts from GitHub Actions CI:</p>
+        <ol>
+          <li>Clone repository: <code>git clone https://github.com/charles-forsyth/field-journal.git</code></li>
+          <li>Set JDK 17 and Android SDK:
+            <pre>export JAVA_HOME=$(brew --prefix openjdk@17)/libexec/openjdk.jdk/Contents/Home
+./gradlew assembleDebug</pre>
+          </li>
+          <li>Install on device:
+            <pre>adb install app/build/outputs/apk/debug/app-debug.apk</pre>
+          </li>
+        </ol>
+      </div>
+
+      <div class="cite-box">
+        <h2 class="section-title" style="font-size: 1.6rem;">Citation</h2>
+        <p style="color: var(--text-muted); margin: 12px 0;">If you use Field Journal in research, agronomy field trials, or wildlife monitoring, please cite:</p>
+        <pre>@software{forsyth2026fieldjournal,
+  author       = {Forsyth, Charles E. III},
+  title        = {Field Journal: an offline-first Android field notebook for land, wildlife and agronomy},
+  version      = {1.2.0},
+  year         = {2026},
+  doi          = {pending},
+  url          = {https://github.com/charles-forsyth/field-journal}
+}</pre>
+        <p style="font-size: 13px; color: var(--text-muted); font-family: var(--font-mono);">DOI: pending &bull; License: MIT</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Field Journal &bull; MIT License &bull; &copy; 2026 Charles Forsyth &bull; <a href="https://github.com/charles-forsyth/field-journal">GitHub Source</a></p>
+  </footer>
+
+  <script>
+    function switchMode(mode, btn) {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('screen-lens').src = 'screenshots/lens_' + mode + '.png';
+      document.getElementById('screen-map').src = 'screenshots/map_' + mode + '.png';
+      document.getElementById('screen-journal').src = 'screenshots/journal_' + mode + '.png';
+      document.getElementById('screen-spectrogram').src = 'screenshots/spectrogram_' + mode + '.png';
+      document.getElementById('screen-settings').src = 'screenshots/settings_' + mode + '.png';
+    }
+  </script>
+</body>
+</html>

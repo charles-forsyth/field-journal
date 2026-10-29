@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive foreground: 432px art already includes the 18dp safe-zone margin; inset keeps it inside the mask. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android" android:drawable="@drawable/ic_fg_art" />

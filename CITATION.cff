@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Field Journal: an offline-first Android field notebook for land, wildlife and agronomy"
+authors:
+  - family-names: Forsyth
+    given-names: Charles E. III
+    orcid: "https://orcid.org/0000-0003-4872-0296"
+version: 1.2.0
+date-released: "2026-10-29"
+license: MIT
+repository-code: "https://github.com/charles-forsyth/field-journal"
